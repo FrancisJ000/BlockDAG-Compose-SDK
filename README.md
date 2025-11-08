@@ -10,8 +10,8 @@
 
 Imagine you're buying an NFT for $1,000, but your funds are fragmented:
 - $300 in BTC
-- $400 in MUSD  
-- $350 in mUSDC
+- $400 in BUSD  
+- $350 in bUSDC
 
 The seller wants payment in a single token. Now you're stuck:
 1. Approve Token A → Wait for confirmation
@@ -49,7 +49,7 @@ The seller wants payment in a single token. Now you're stuck:
 ### Core Components
 
 #### 1️⃣ **User Layer**
-- Users with fragmented assets (BTC, MUSD, stablecoins)
+- Users with fragmented assets (BTC, BUSD, stablecoins)
 - Single wallet interface for multi-asset allocation
 - Real-time balance visibility with USD valuations
 
@@ -59,7 +59,7 @@ The SDK coordinates three essential subsystems:
 
 **🔮 Price Oracles**
 - Skip Connect Oracle for BTC/USD pricing
-- Pyth Network for stablecoin feeds (MUSD, mUSDC, mUSDT)
+- Pyth Network for stablecoin feeds (BUSD, bUSDC, bUSDT)
 - Real-time price updates normalized to consistent decimals
 - Fallback mechanisms for oracle reliability
 
@@ -67,7 +67,7 @@ The SDK coordinates three essential subsystems:
 - Generates optimized ERC20 approval calldata
 - Constructs multi-asset payment transactions
 - Encodes amounts with proper decimal handling
-- Optional swap routing through Mezo Pools (Tigris DEX)
+- Optional swap routing through BlockDAG Pools (Tigris DEX)
 
 **⚡ EIP-5792 Batch Handler**
 - Atomic batching of approvals + payment call
@@ -76,7 +76,7 @@ The SDK coordinates three essential subsystems:
 - Reduces gas costs and eliminates confirmation waiting
 
 #### 3️⃣ **Smart Contract Layer**
-- On-chain settlement via `MezoCompose` contract
+- On-chain settlement via `BlockDAGCompose` contract
 - Multi-token reception in a single atomic operation
 - Integration hooks for marketplaces, protocols, and dApps
 - Emergency recovery mechanisms
@@ -112,7 +112,7 @@ The SDK coordinates three essential subsystems:
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
 │  1. See all balances valued in real-time USD            │
-│  2. Drag sliders to allocate BTC + MUSD + mUSDC         │
+│  2. Drag sliders to allocate BTC + BUSD + bUSDC         │
 │  3. Click "Pay" → Sign once ✍️                          │
 │  4. Done ✅                                              │
 │                                                          │
@@ -134,7 +134,7 @@ The SDK coordinates three essential subsystems:
 - Real-time hooks for prices and balances
 
 **Oracle Integration**
-- Skip Connect (Chainlink-compatible) for BTC pricing on Mezo
+- Skip Connect (Chainlink-compatible) for BTC pricing on BlockDAG
 - Pyth Network for low-latency stablecoin feeds
 - Price normalization layer for consistent decimal handling
 
@@ -145,24 +145,24 @@ The SDK coordinates three essential subsystems:
 - Dynamic approval amounts based on user allocation
 
 **Smart Contracts**
-- `MezoCompose.sol` - Multi-asset payment receiver
-- `MezoRouter.sol` - Optional swap integration
+- `BlockDAGCompose.sol` - Multi-asset payment receiver
+- `BlockDAGRouter.sol` - Optional swap integration
 - Emergency withdrawal mechanisms
 - Owner controls for protocol upgrades
 
 **Supported Networks** (Planned)
-- ✅ Mezo Testnet (Chain ID: 31611) - Primary target
-- 🔜 Mezo Mainnet
+- ✅ BlockDAG Testnet (Chain ID: 31611) - Primary target
+- 🔜 BlockDAG Mainnet
 - 🔜 Bitcoin L2s with EVM compatibility
 
 ### Supported Assets (Initial Phase)
 
 | Asset | Symbol | Use Case | Oracle Source |
 |-------|--------|----------|---------------|
-| Bitcoin | BTC | Primary DeFi asset on Mezo | Skip Connect |
-| Mezo USD | MUSD | Bitcoin-backed stablecoin | Pyth Network |
-| Bridged USDC | mUSDC | Liquidity bridge | Pyth Network |
-| Bridged USDT | mUSDT | Liquidity bridge | Pyth Network |
+| Bitcoin | BTC | Primary DeFi asset on BlockDAG | Skip Connect |
+| BlockDAG USD | BUSD | Bitcoin-backed stablecoin | Pyth Network |
+| Bridged USDC | bUSDC | Liquidity bridge | Pyth Network |
+| Bridged USDT | bUSDT | Liquidity bridge | Pyth Network |
 
 ---
 
@@ -181,7 +181,7 @@ The SDK coordinates three essential subsystems:
   - [ ] Transaction builder utilities
   - [ ] EIP-5792 batch handler
 - [ ] Smart contract development
-  - [ ] MezoCompose contract
+  - [ ] BlockDAGCompose contract
   - [ ] Test suite
   - [ ] Gas optimization
 - [ ] React component library
@@ -198,7 +198,7 @@ The SDK coordinates three essential subsystems:
 - [ ] Security review
 
 ### Phase 4: Deployment & Integration
-- [ ] Mezo Testnet deployment
+- [ ] BlockDAG Testnet deployment
 - [ ] Demo application (NFT marketplace example)
 - [ ] SDK npm package publishing
 - [ ] Developer documentation
@@ -237,13 +237,13 @@ Multi-asset funding rounds and contributions. Contributors use their preferred t
 ### Quick Integration Example
 
 ```tsx
-import { MezoOracleService, MEZO_TESTNET_CONFIG, Assets } from 'mezo-compose-sdk';
+import { BlockDAGOracleService, BLOCKDAG_TESTNET_CONFIG, Assets } from 'blockdag-compose-sdk';
 import { useAccount, useChainId } from 'wagmi';
 
 function Checkout() {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  const service = new MezoOracleService(MEZO_TESTNET_CONFIG);
+  const service = new BlockDAGOracleService(BLOCKDAG_TESTNET_CONFIG);
   
   const wallet = { address, isConnected, chainId };
   
@@ -264,10 +264,10 @@ function Checkout() {
 ### Hook-Based Approach
 
 ```tsx
-import { usePrices, useBalances, MezoOracleService } from 'mezo-compose-sdk';
+import { usePrices, useBalances, BlockDAGOracleService } from 'blockdag-compose-sdk';
 
 function CustomCheckout() {
-  const service = new MezoOracleService(MEZO_TESTNET_CONFIG);
+  const service = new BlockDAGOracleService(BLOCKDAG_TESTNET_CONFIG);
   const { prices, loading } = usePrices(service);
   const { balances } = useBalances(service, wallet);
   
@@ -284,7 +284,7 @@ function CustomCheckout() {
 ### Transaction Building
 
 ```tsx
-import { buildAllocateBatchTransaction } from 'mezo-compose-sdk';
+import { buildAllocateBatchTransaction } from 'blockdag-compose-sdk';
 
 const handlePayment = async (payload) => {
   // Get all transactions (approvals + payment)
@@ -366,7 +366,7 @@ const handlePayment = async (payload) => {
 ## 📁 Proposed Project Structure
 
 ```
-mezo-compose-sdk/
+blockdag-compose-sdk/
 ├── src/
 │   ├── components/          # React UI components
 │   │   ├── Assets.tsx       # Main allocation UI
@@ -376,11 +376,11 @@ mezo-compose-sdk/
 │   │   ├── useBalances.ts   # User token balances
 │   │   └── useAssetData.ts  # Combined allocation state
 │   ├── services/            # Data fetching services
-│   │   ├── MezoOracleService.ts   # Skip + Pyth integration
-│   │   └── MezoSwapService.ts     # Tigris DEX routing
+│   │   ├── BlockDAGOracleService.ts   # Skip + Pyth integration
+│   │   └── BlockDAGSwapService.ts     # Tigris DEX routing
 │   ├── contracts/           # ABIs and addresses
-│   │   ├── MezoCompose.ts
-│   │   └── MezoRouter.ts
+│   │   ├── BlockDAGCompose.ts
+│   │   └── BlockDAGRouter.ts
 │   ├── utils/               # Core utilities
 │   │   ├── transactionBuilder.ts  # TX encoding
 │   │   ├── formatters.ts          # Display formatting
@@ -394,7 +394,7 @@ mezo-compose-sdk/
 │       ├── wallet.ts
 │       └── transaction.ts
 ├── contracts/               # Solidity contracts
-│   ├── MezoCompose.sol
+│   ├── BlockDAGCompose.sol
 │   └── interfaces/
 ├── test/                    # Test suites
 ├── docs/                    # Documentation
@@ -447,12 +447,12 @@ mezo-compose-sdk/
 - [EIP-5792: Wallet Call API](https://eips.ethereum.org/EIPS/eip-5792) - Atomic batch transactions
 - [EIP-20: Token Standard](https://eips.ethereum.org/EIPS/eip-20) - ERC20 interface
 - [Pyth Network](https://pyth.network/) - Cross-chain price oracles
-- [Skip Connect](https://skip.build/) - Mezo-native BTC oracle
+- [Skip Connect](https://skip.build/) - BlockDAG-native BTC oracle
 
-### Mezo Network
-- [Mezo Documentation](https://mezo.org/docs)
-- [Mezo Testnet Explorer](https://explorer.test.mezo.org)
-- [Mezo Pools (Tigris DEX)](https://docs.tigris.io/)
+### BlockDAG Network
+- [BlockDAG Documentation](https://blockdag.network/docs)
+- [BlockDAG Testnet Explorer](https://explorer.test.blockdag.network)
+- [BlockDAG Pools (Tigris DEX)](https://docs.tigris.io/)
 
 ---
 
