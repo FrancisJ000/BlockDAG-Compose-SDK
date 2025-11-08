@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env.dev
+.env
+
+# Documentation (cloned repo)
+documentation/
+
+# Markdown files except README and BATCH_CALLS
+*.md
+!README.md
+!BATCH_CALLS.md
+
+# Foundry
+broadcast/
+cache/
+out/
+lib/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tgz
